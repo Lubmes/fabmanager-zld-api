@@ -12,13 +12,13 @@ gem 'rack-cors'
 gem 'nokogiri', require: false
 gem 'bcrypt', '~> 3.1', '>= 3.1.11'
 gem 'jwt'
+gem 'faker'
 
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
   gem 'pry-rails'
   gem 'rspec-rails'
   gem 'factory_girl_rails'
-  gem 'faker'
   gem 'timecop'
 end
 
