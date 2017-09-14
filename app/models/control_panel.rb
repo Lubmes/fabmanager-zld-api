@@ -1,0 +1,2 @@
+class ControlPanel < ApplicationRecord
+end
