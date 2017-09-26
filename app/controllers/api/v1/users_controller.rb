@@ -1,7 +1,8 @@
 module Api
   module V1
     class UsersController < ApplicationController
-      before_action :set_user, only: [:show, :update, :destroy]
+      before_action :set_user, only: [:show, :update, :destroy,
+                                      :occupations, :reservations, :comments, :tags]
 
       # GET /users
       def index
@@ -38,6 +39,26 @@ module Api
       # DELETE /users/1
       def destroy
         @user.destroy
+      end
+
+      def occupations
+        @occupations = MachineOccupation.where(user: @user)
+        render json: @occupations
+      end
+
+      def reservations
+        @reservations = Reservation.where(user: @user)
+        render json: @reservations
+      end
+
+      def comments
+        @comments = Comment.where(author: @user)
+        render json: @comments
+      end
+
+      def tags
+        @tags = ["code mist voor: tags van deze gebruiker als tagger."] # logica later invoegen.
+        render json: @tags
       end
 
       private

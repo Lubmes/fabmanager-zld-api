@@ -18,52 +18,27 @@ def create_user(admin = false)
 end
 
 def create_fabmoment(user, title)
+  programs = Program.all
+  machines = Machine.all
+  materials = Material.all
+  licenses = License.all
+
   fabmoment = user.fabmoments.find_or_create_by(title: title)
   fabmoment.description = Faker::Lorem.paragraph
+  rand(1..5).times do
+    fabmoment.programs << programs.sample
+  end
+  rand(1..5).times do
+    fabmoment.machines << machines.sample
+  end
+  rand(1..5).times do
+    fabmoment.materials << materials.sample
+  end
+  fabmoment.license = licenses.sample
+
   fabmoment.save
   fabmoment
 end
-
-unless User.exists?(email: "info@fablabzeeland.com")
-  user_1 = User.create!(username: "De Fabmanager",
-                        email: "info@fablabzeeland.com",
-                        password: "12345",
-                        admin: true)
-
-  create_fabmoment(user_1, Faker::App.name)
-  create_fabmoment(user_1, Faker::App.name)
-end
-
-unless User.any?
-  user_2 = create_user
-  user_3 = create_user
-
-  create_fabmoment(user_2, Faker::App.name)
-  create_fabmoment(user_2, Faker::App.name)
-  create_fabmoment(user_2, Faker::App.name)
-  create_fabmoment(user_2, Faker::App.name)
-  create_fabmoment(user_2, Faker::App.name)
-  create_fabmoment(user_2, Faker::App.name)
-  create_fabmoment(user_3, Faker::App.name)
-  create_fabmoment(user_3, Faker::App.name)
-  create_fabmoment(user_3, Faker::App.name)
-  create_fabmoment(user_3, Faker::App.name)
-  create_fabmoment(user_3, Faker::App.name)
-  create_fabmoment(user_3, Faker::App.name)
-end
-
-# creeer comments
-# Comment.delete_all
-unless Comment.any?
-  fabmoments = Fabmoment.all
-  users = User.all
-  25.times do
-    Comment.create(text: Faker::Lorem.paragraph(1..3),
-                   fabmoment_id: fabmoments.sample.id,
-                   author_id: users.sample.id)
-  end
-end
-
 
 unless Machine.exists?(name: "Ultimaker Original", capacity: 1)
   m1 = Machine.create(name: "Ultimaker Three", capacity: 1)
@@ -140,4 +115,73 @@ unless ControlPanel.any?
     max_minutes_to_occupy_one_machine: 30,
     open_hour: false
   )
+end
+
+unless User.exists?(email: "info@fablabzeeland.com")
+  user_1 = User.create!(username: "De Fabmanager",
+                        email: "info@fablabzeeland.com",
+                        password: "12345",
+                        admin: true)
+
+  create_fabmoment(user_1, Faker::App.name)
+  create_fabmoment(user_1, Faker::App.name)
+end
+
+unless User.any?
+  user_2 = create_user
+  user_3 = create_user
+
+  create_fabmoment(user_2, Faker::App.name)
+  create_fabmoment(user_2, Faker::App.name)
+  create_fabmoment(user_2, Faker::App.name)
+  create_fabmoment(user_2, Faker::App.name)
+  create_fabmoment(user_2, Faker::App.name)
+  create_fabmoment(user_2, Faker::App.name)
+  create_fabmoment(user_3, Faker::App.name)
+  create_fabmoment(user_3, Faker::App.name)
+  create_fabmoment(user_3, Faker::App.name)
+  create_fabmoment(user_3, Faker::App.name)
+  create_fabmoment(user_3, Faker::App.name)
+  create_fabmoment(user_3, Faker::App.name)
+end
+
+unless ActsAsTaggableOn::Tag.any?
+  Fabmoment.all.each do |fabmoment|
+    fabmoment.tag_list.add Faker::Lorem.words(0..8)
+  end
+end
+
+## Creeer comments
+# Comment.delete_all
+unless Comment.any?
+  fabmoments = Fabmoment.all
+  users = User.all
+  25.times do
+    Comment.create(text: Faker::Lorem.paragraph(1..3),
+                   fabmoment: fabmoments.sample,
+                   author: users.sample)
+  end
+end
+
+## Vul agenda op
+# MachineOccupation.delete_all
+# MachineReservation.delete_all
+# Reservation.delete_all
+unless Reservation.any?
+  users = User.all
+  machines = Machine.all
+  4.times do
+    MachineOccupation.create(user: users.sample,
+                             machine: machines.sample)
+  end
+  60.times do
+    start_time = Time.now + 1.month + rand(0..20).days + rand(0..4).hours
+    Reservation.create(user: users.sample,
+                       machines: [machines.sample, machines.sample],
+                       title: "Reservering: #{Faker::App.name}",
+                       description: Faker::Lorem.paragraph(1..3),
+                       start_time: start_time,
+                       end_time: start_time + rand(1..2).hour,
+                       approved: [true, false].sample )
+  end
 end

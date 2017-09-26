@@ -4,6 +4,7 @@ class User < ApplicationRecord
   validates :username, presence: true
 
   has_many :fabmoments
+  # has_many :comments, as: :author
 
   def to_s
     username

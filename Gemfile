@@ -11,8 +11,11 @@ gem 'puma', '~> 3.7'
 gem 'rack-cors'
 gem 'nokogiri', require: false
 gem 'bcrypt', '~> 3.1', '>= 3.1.11'
+
 gem 'jwt'
 gem 'faker'
+gem 'acts-as-taggable-on', '~> 5.0'
+gem 'acts_as_votable', '~> 0.10.0'
 
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]

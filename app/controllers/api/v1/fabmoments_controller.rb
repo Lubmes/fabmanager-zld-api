@@ -2,7 +2,7 @@ module Api
   module V1
     class FabmomentsController < ApplicationController
       before_action :set_user, only: [:index, :create]
-      before_action :set_fabmoment, only: [:show, :update, :destroy]
+      before_action :set_fabmoment, only: [:show, :update, :destroy, :tags]
 
       # GET /fabmoments
       def index
@@ -40,6 +40,11 @@ module Api
         @fabmoment.destroy
       end
 
+      def tags
+        @tags = @fabmoment.tag_list
+        render json: @tags
+      end
+
       private
         # Use callbacks to share common setup or constraints between actions.
         def set_fabmoment
@@ -52,7 +57,7 @@ module Api
 
         # Only allow a trusted parameter "white list" through.
         def fabmoment_params
-          params.require(:fabmoment).permit(:user_id, :title, :description)
+          params.require(:fabmoment).permit(:user_id, :title, :description, :tag_list)
         end
     end
   end
