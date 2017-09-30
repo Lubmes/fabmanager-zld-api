@@ -2,11 +2,17 @@ module Api
   module V1
     class FabmomentsController < ApplicationController
       before_action :set_user, only: [:index, :create]
-      before_action :set_fabmoment, only: [:show, :update, :destroy, :tags]
+      before_action :set_fabmoment, only: [:show, :update, :destroy,
+        :tags, :likes, :programs, :materials, :machines]
 
       # GET /fabmoments
       def index
         @fabmoments = @user.fabmoments.all
+        render json: @fabmoments
+      end
+
+      def app_index
+        @fabmoments = Fabmoment.all
         render json: @fabmoments
       end
 
@@ -43,6 +49,26 @@ module Api
       def tags
         @tags = @fabmoment.tag_list
         render json: @tags
+      end
+
+      def likes
+        @likes = @fabmoment.get_likes
+        render json: @likes
+      end
+
+      def programs
+        @programs = @fabmoment.programs
+        render json: @programs
+      end
+
+      def materials
+        @materials = @fabmoment.materials
+        render json: @materials
+      end
+
+      def machines
+        @machines = @fabmoment.machines
+        render json: @machines
       end
 
       private

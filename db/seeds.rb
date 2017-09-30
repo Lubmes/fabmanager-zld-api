@@ -1,11 +1,3 @@
-# This file should contain all the record creation needed to seed the database with its default values.
-# The data can then be loaded with the rails db:seed command (or created alongside the database with db:setup).
-#
-# Examples:
-#
-#   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
-#   Character.create(name: 'Luke', movie: movies.first)
-
 # Fabmoment.delete_all
 # User.delete_all
 
@@ -40,14 +32,20 @@ def create_fabmoment(user, title)
   fabmoment
 end
 
-unless Machine.exists?(name: "Ultimaker Original", capacity: 1)
-  m1 = Machine.create(name: "Ultimaker Three", capacity: 1)
-  m2 = Machine.create(name: "Ultimaker Original Plus", capacity: 1)
-  m3 = Machine.create(name: "Ultimaker Two", capacity: 3)
-  m4 = Machine.create(name: "Ultimaker Two Plus", capacity: 2)
-  m5 = Machine.create(name: "Lasersnijder", capacity: 1)
-  m6 = Machine.create(name: "Vinylsnijder", capacity: 1)
-  m7 = Machine.create(name: "3D Scanner", capacity: 1)
+def create_machine(name, capacity)
+  machine = Machine.find_or_create_by(name: name)
+  machine.create_usage(capacity: capacity)
+  machine
+end
+
+unless Machine.exists?(name: "Ultimaker Three")
+  create_machine("Ultimaker Three", 1)
+  create_machine("Ultimaker Original Plus", 1)
+  create_machine("Ultimaker Two", 3)
+  create_machine("Ultimaker Two Plus", 2)
+  create_machine("Lasersnijder", 1)
+  create_machine("Vinylsnijder", 1)
+  create_machine("3D Scanner", 1)
 end
 
 unless Program.exists?(name: "Adobe Illustrator")
@@ -109,14 +107,6 @@ unless License.exists?(title:"Naamsvermelding")
                  description: "license7")
 end
 
-unless ControlPanel.any?
-  ControlPanel.create(
-    max_machines_to_occupy: 1,
-    max_minutes_to_occupy_one_machine: 30,
-    open_hour: false
-  )
-end
-
 unless User.exists?(email: "info@fablabzeeland.com")
   user_1 = User.create!(username: "De Fabmanager",
                         email: "info@fablabzeeland.com",
@@ -127,7 +117,7 @@ unless User.exists?(email: "info@fablabzeeland.com")
   create_fabmoment(user_1, Faker::App.name)
 end
 
-unless User.any?
+unless User.all.size > 1
   user_2 = create_user
   user_3 = create_user
 
@@ -148,11 +138,11 @@ end
 unless ActsAsTaggableOn::Tag.any?
   Fabmoment.all.each do |fabmoment|
     fabmoment.tag_list.add Faker::Lorem.words(0..8)
+    fabmoment.save
   end
 end
 
-## Creeer comments
-# Comment.delete_all
+## Creeer comments en likes
 unless Comment.any?
   fabmoments = Fabmoment.all
   users = User.all
@@ -160,13 +150,11 @@ unless Comment.any?
     Comment.create(text: Faker::Lorem.paragraph(1..3),
                    fabmoment: fabmoments.sample,
                    author: users.sample)
+    fabmoments.sample.liked_by users.sample
   end
 end
 
 ## Vul agenda op
-# MachineOccupation.delete_all
-# MachineReservation.delete_all
-# Reservation.delete_all
 unless Reservation.any?
   users = User.all
   machines = Machine.all
@@ -184,4 +172,70 @@ unless Reservation.any?
                        end_time: start_time + rand(1..2).hour,
                        approved: [true, false].sample )
   end
+end
+
+unless ControlPanel.any?
+  ControlPanel.create(
+    max_machines_to_occupy: 1,
+    max_minutes_to_occupy_one_machine: 30,
+    open_hour: false
+  )
+end
+
+# ReturningActivity.delete_all
+# WeeklyTimeTable.delete_all
+
+unless WeeklyTimeTable.any?
+  regular = WeeklyTimeTable.create(
+    control_panel: ControlPanel.first,
+    title: "Fablab weekschema",
+    subtitle: "Openingstijden buiten alle vakanties om.",
+    active: true
+  )
+  regular.returning_activities.create(
+    day: :monday,
+    start_time: "17:00",
+    end_time: "20:00",
+    caption: "Open inloop"
+  )
+  regular.returning_activities.create(
+    day: :tuesday,
+    start_time: "13:00",
+    end_time: "17:00",
+    caption: "Open inloop"
+  )
+  regular.returning_activities.create(
+    day: :tuesday,
+    start_time: "18:00",
+    end_time: "20:00",
+    caption: "Cursus"
+  )
+  regular.returning_activities.create(
+    day: :wednesday,
+    caption: "Alleen op afspraak"
+  )
+  regular.returning_activities.create(
+    day: :thursday,
+    caption: "Alleen op afspraak"
+  )
+  regular.returning_activities.create(
+    day: :friday,
+    start_time: "10:00",
+    end_time: "12:00",
+    caption: "Cursus"
+  )
+  regular.returning_activities.create(
+    day: :friday,
+    start_time: "13:00",
+    end_time: "17:00",
+    caption: "Open inloop"
+  )
+  regular.save
+
+  WeeklyTimeTable.create!(
+    control_panel: ControlPanel.first,
+    title: "Fablab weekschema",
+    subtitle: "van 1 juli tot 15 augustus",
+    active: false
+  )
 end

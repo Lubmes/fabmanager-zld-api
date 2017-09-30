@@ -4,7 +4,9 @@ module Api
 
       def show
         @control_panel = ControlPanel.last
-        render json: @control_panel
+        render json: @control_panel,
+                     include: [
+                       :weekly_time_tables => { include: :returning_activities } ]
       end
 
       def update

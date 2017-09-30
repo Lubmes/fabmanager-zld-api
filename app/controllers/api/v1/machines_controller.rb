@@ -7,7 +7,7 @@ module Api
       def index
         @machines = Machine.all
 
-        render json: @machines
+        render json: @machines, include: [:usage]
       end
 
       # GET /machines/1

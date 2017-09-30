@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170921120627) do
+ActiveRecord::Schema.define(version: 20170929093131) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -105,8 +105,6 @@ ActiveRecord::Schema.define(version: 20170921120627) do
 
   create_table "machines", force: :cascade do |t|
     t.string "name"
-    t.integer "usage"
-    t.integer "capacity"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -137,6 +135,17 @@ ActiveRecord::Schema.define(version: 20170921120627) do
     t.index ["user_id"], name: "index_reservations_on_user_id"
   end
 
+  create_table "returning_activities", force: :cascade do |t|
+    t.bigint "weekly_time_table_id"
+    t.integer "day"
+    t.time "start_time"
+    t.time "end_time"
+    t.string "caption"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["weekly_time_table_id"], name: "index_returning_activities_on_weekly_time_table_id"
+  end
+
   create_table "taggings", id: :serial, force: :cascade do |t|
     t.integer "tag_id"
     t.string "taggable_type"
@@ -162,6 +171,15 @@ ActiveRecord::Schema.define(version: 20170921120627) do
     t.index ["name"], name: "index_tags_on_name", unique: true
   end
 
+  create_table "usages", force: :cascade do |t|
+    t.bigint "machine_id"
+    t.integer "capacity"
+    t.integer "in_use"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["machine_id"], name: "index_usages_on_machine_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "username"
     t.string "email", null: false
@@ -169,6 +187,32 @@ ActiveRecord::Schema.define(version: 20170921120627) do
     t.boolean "admin", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "votes", force: :cascade do |t|
+    t.string "votable_type"
+    t.bigint "votable_id"
+    t.string "voter_type"
+    t.bigint "voter_id"
+    t.boolean "vote_flag"
+    t.string "vote_scope"
+    t.integer "vote_weight"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["votable_id", "votable_type", "vote_scope"], name: "index_votes_on_votable_id_and_votable_type_and_vote_scope"
+    t.index ["votable_type", "votable_id"], name: "index_votes_on_votable_type_and_votable_id"
+    t.index ["voter_id", "voter_type", "vote_scope"], name: "index_votes_on_voter_id_and_voter_type_and_vote_scope"
+    t.index ["voter_type", "voter_id"], name: "index_votes_on_voter_type_and_voter_id"
+  end
+
+  create_table "weekly_time_tables", force: :cascade do |t|
+    t.bigint "control_panel_id"
+    t.string "title"
+    t.string "subtitle"
+    t.boolean "active", default: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["control_panel_id"], name: "index_weekly_time_tables_on_control_panel_id"
   end
 
   add_foreign_key "comments", "fabmoments"
@@ -179,4 +223,6 @@ ActiveRecord::Schema.define(version: 20170921120627) do
   add_foreign_key "machine_reservations", "machines"
   add_foreign_key "machine_reservations", "reservations"
   add_foreign_key "reservations", "users"
+  add_foreign_key "returning_activities", "weekly_time_tables"
+  add_foreign_key "weekly_time_tables", "control_panels"
 end
