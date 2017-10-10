@@ -12,19 +12,16 @@
 
 ActiveRecord::Schema.define(version: 20170929093131) do
 
-  # These are extensions that must be enabled in order to support this database
-  enable_extension "plpgsql"
-
   create_table "abidances", force: :cascade do |t|
-    t.bigint "fabmoment_id"
-    t.bigint "license_id"
+    t.integer "fabmoment_id"
+    t.integer "license_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["fabmoment_id"], name: "index_abidances_on_fabmoment_id"
     t.index ["license_id"], name: "index_abidances_on_license_id"
   end
 
-  create_table "comments", id: :serial, force: :cascade do |t|
+  create_table "comments", force: :cascade do |t|
     t.text "text"
     t.integer "fabmoment_id"
     t.integer "author_id"
@@ -43,8 +40,8 @@ ActiveRecord::Schema.define(version: 20170929093131) do
   end
 
   create_table "controles", force: :cascade do |t|
-    t.bigint "fabmoment_id"
-    t.bigint "program_id"
+    t.integer "fabmoment_id"
+    t.integer "program_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["fabmoment_id"], name: "index_controles_on_fabmoment_id"
@@ -52,7 +49,7 @@ ActiveRecord::Schema.define(version: 20170929093131) do
   end
 
   create_table "fabmoments", force: :cascade do |t|
-    t.bigint "user_id"
+    t.integer "user_id"
     t.string "title"
     t.text "description"
     t.datetime "created_at", null: false
@@ -61,8 +58,8 @@ ActiveRecord::Schema.define(version: 20170929093131) do
   end
 
   create_table "feeds", force: :cascade do |t|
-    t.bigint "fabmoment_id"
-    t.bigint "material_id"
+    t.integer "fabmoment_id"
+    t.integer "material_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["fabmoment_id"], name: "index_feeds_on_fabmoment_id"
@@ -70,8 +67,8 @@ ActiveRecord::Schema.define(version: 20170929093131) do
   end
 
   create_table "handles", force: :cascade do |t|
-    t.bigint "fabmoment_id"
-    t.bigint "machine_id"
+    t.integer "fabmoment_id"
+    t.integer "machine_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["fabmoment_id"], name: "index_handles_on_fabmoment_id"
@@ -86,8 +83,8 @@ ActiveRecord::Schema.define(version: 20170929093131) do
   end
 
   create_table "machine_occupations", force: :cascade do |t|
-    t.bigint "machine_id"
-    t.bigint "user_id"
+    t.integer "machine_id"
+    t.integer "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["machine_id"], name: "index_machine_occupations_on_machine_id"
@@ -95,8 +92,8 @@ ActiveRecord::Schema.define(version: 20170929093131) do
   end
 
   create_table "machine_reservations", force: :cascade do |t|
-    t.bigint "machine_id"
-    t.bigint "reservation_id"
+    t.integer "machine_id"
+    t.integer "reservation_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["machine_id"], name: "index_machine_reservations_on_machine_id"
@@ -129,14 +126,14 @@ ActiveRecord::Schema.define(version: 20170929093131) do
     t.datetime "start_time"
     t.datetime "end_time"
     t.boolean "approved", default: false
-    t.bigint "user_id"
+    t.integer "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_reservations_on_user_id"
   end
 
   create_table "returning_activities", force: :cascade do |t|
-    t.bigint "weekly_time_table_id"
+    t.integer "weekly_time_table_id"
     t.integer "day"
     t.time "start_time"
     t.time "end_time"
@@ -146,7 +143,7 @@ ActiveRecord::Schema.define(version: 20170929093131) do
     t.index ["weekly_time_table_id"], name: "index_returning_activities_on_weekly_time_table_id"
   end
 
-  create_table "taggings", id: :serial, force: :cascade do |t|
+  create_table "taggings", force: :cascade do |t|
     t.integer "tag_id"
     t.string "taggable_type"
     t.integer "taggable_id"
@@ -165,14 +162,14 @@ ActiveRecord::Schema.define(version: 20170929093131) do
     t.index ["tagger_id"], name: "index_taggings_on_tagger_id"
   end
 
-  create_table "tags", id: :serial, force: :cascade do |t|
+  create_table "tags", force: :cascade do |t|
     t.string "name"
     t.integer "taggings_count", default: 0
     t.index ["name"], name: "index_tags_on_name", unique: true
   end
 
   create_table "usages", force: :cascade do |t|
-    t.bigint "machine_id"
+    t.integer "machine_id"
     t.integer "capacity"
     t.integer "in_use"
     t.datetime "created_at", null: false
@@ -191,9 +188,9 @@ ActiveRecord::Schema.define(version: 20170929093131) do
 
   create_table "votes", force: :cascade do |t|
     t.string "votable_type"
-    t.bigint "votable_id"
+    t.integer "votable_id"
     t.string "voter_type"
-    t.bigint "voter_id"
+    t.integer "voter_id"
     t.boolean "vote_flag"
     t.string "vote_scope"
     t.integer "vote_weight"
@@ -206,7 +203,7 @@ ActiveRecord::Schema.define(version: 20170929093131) do
   end
 
   create_table "weekly_time_tables", force: :cascade do |t|
-    t.bigint "control_panel_id"
+    t.integer "control_panel_id"
     t.string "title"
     t.string "subtitle"
     t.boolean "active", default: false
@@ -215,14 +212,4 @@ ActiveRecord::Schema.define(version: 20170929093131) do
     t.index ["control_panel_id"], name: "index_weekly_time_tables_on_control_panel_id"
   end
 
-  add_foreign_key "comments", "fabmoments"
-  add_foreign_key "comments", "users", column: "author_id"
-  add_foreign_key "fabmoments", "users"
-  add_foreign_key "machine_occupations", "machines"
-  add_foreign_key "machine_occupations", "users"
-  add_foreign_key "machine_reservations", "machines"
-  add_foreign_key "machine_reservations", "reservations"
-  add_foreign_key "reservations", "users"
-  add_foreign_key "returning_activities", "weekly_time_tables"
-  add_foreign_key "weekly_time_tables", "control_panels"
 end

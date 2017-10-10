@@ -14,18 +14,26 @@
 # Configure Using Gemfile
 # gem 'pg'
 #
+#default: &default
+#  adapter: postgresql
+#  encoding: unicode
+#  # For details on connection pooling, see Rails configuration guide
+#  # http://guides.rubyonrails.org/configuring.html#database-pooling
+#  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
 default: &default
-  adapter: postgresql
-  encoding: unicode
-  # For details on connection pooling, see Rails configuration guide
+  adapter: sqlite3
+  host: localhost
+  encoding: utf8
+  username: root
+  password: admin
+  port: 3306
+  # For details on connection pooling, see rails configuration guide
   # http://guides.rubyonrails.org/configuring.html#database-pooling
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
 
 development: &development
   <<: *default
   database: fabmanager-zld-api_development
-  username: postgres
-  password: our-awesome-bookstore-app
   host: localhost
 
   # The specified database role being used to connect to postgres.

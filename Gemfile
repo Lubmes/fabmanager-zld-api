@@ -6,12 +6,14 @@ git_source(:github) do |repo_name|
 end
 
 gem 'rails', '~> 5.1.3'
-gem 'pg', '~> 0.18'
+# gem 'pg', '~> 0.18'
 gem 'puma', '~> 3.7'
 gem 'rack-cors'
 gem 'nokogiri', require: false
-# gem 'bcrypt', '~> 3.1', '>= 3.1.11'
-gem 'bcrypt-ruby', '3.1.5', :require => 'bcrypt'
+# gem 'bcrypt', '~> 3.1.11'
+gem 'bcrypt', '~> 3.1', '>= 3.1.11'
+# gem 'bcrypt-ruby', '3.1.5', :require => 'bcrypt'
+gem 'sqlite3'
 
 gem 'jwt'
 gem 'faker'
