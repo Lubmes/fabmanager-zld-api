@@ -12,6 +12,7 @@ Rails.application.routes.draw do
     namespace :v1 do
       resource :auth, only: %i[create]
       resources :tags, only: %i[index]
+      resources :events
       resources :users do
         resources :reservations
         member do
