@@ -11,7 +11,8 @@ module API
 
 
       def index
-
+        @events = @events.all
+        render json: @events
       end
 
       require 'openssl'
