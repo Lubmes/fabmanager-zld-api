@@ -1,21 +1,20 @@
-require 'google/apis/calendar_v3'
-require 'googleauth'
-require 'googleauth/stores/file_token_store'
-
-require 'fileutils'
-
-module API
+module Api
   module V1
     class EventsController < ApplicationController
 
+      require 'google/apis/calendar_v3'
+      require 'googleauth'
+      require 'googleauth/stores/file_token_store'
+      require 'openssl'
+      require 'fileutils'
 
 
       def index
-        @events = @events.all
-        render json: @events
+        # @events = Event.all
+        # render json: @events
       end
 
-      require 'openssl'
+
       OpenSSL::SSL::VERIFY_PEER = OpenSSL::SSL::VERIFY_NONE
 
       def retrieve_events
@@ -31,6 +30,7 @@ module API
         service.authorization = client
 
         @event_list = service.list_events(params[:calendar_id])
+        # @event_list = service.list_events(1)
 
         @event_list.items.each do |event|
 
@@ -47,6 +47,7 @@ module API
             e.save!
           end
         end
+        render json: @event_list
       end
 
       def new_event
