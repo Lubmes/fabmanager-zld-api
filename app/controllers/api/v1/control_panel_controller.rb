@@ -18,6 +18,17 @@ module Api
         end
       end
 
+      def open_time
+
+      end
+
+      def end_open_time
+        if Machine.open_hour = false
+          @usages.in_use = 0
+        end
+
+      end
+
       private
 
       # Only allow a trusted parameter "white list" through.

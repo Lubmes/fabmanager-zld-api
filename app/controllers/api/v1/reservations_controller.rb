@@ -24,13 +24,12 @@ module Api
       # end
 
 
-      # def deny
-      #   if Reservation.approved == false
-      #     @reservation = reservation
-      #
-      #     mail(to: @user.email, subject: 'Huur verzoek is afgewezen.')
-      #   end
-      # end
+      def deny
+        if Reservation.approved == false
+
+          ReservationsMailer.denied_mail(@user).deliver_now
+        end
+      end
 
       private
 
