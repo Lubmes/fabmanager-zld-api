@@ -12,8 +12,6 @@ class ReservationsMailer < ApplicationMailer
 
   def denied_mail(user)
     @user = user
-    @reservation = reservation
-
     mail(to: @user.email, subject: 'Huur verzoek is afgewezen.')
   end
 

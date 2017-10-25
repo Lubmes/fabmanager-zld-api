@@ -5,4 +5,8 @@ class ReservationsMailerPreview < ActionMailer::Preview
     ReservationsMailer.create_mail(User.first)
   end
 
+  def denied_mail
+    ReservationsMailer.denied_mail(User.first)
+  end
+
 end
