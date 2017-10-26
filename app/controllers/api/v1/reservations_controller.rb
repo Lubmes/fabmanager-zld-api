@@ -15,13 +15,12 @@ module Api
       end
 
 
-      # def approve
-      #   if Reservation.approve == true
-      #     @reservation = Reservation
-      #
-      #     ReservationsMailer.denied_mail(@user).deliver_later
-      #   end
-      # end
+      def approve
+        if Reservation.approve == true
+
+          ReservationsMailer.approve_mail(@user).deliver_later
+        end
+      end
 
 
       def deny
