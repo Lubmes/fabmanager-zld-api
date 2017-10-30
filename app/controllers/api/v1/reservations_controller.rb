@@ -2,6 +2,7 @@ module Api
   module V1
     class ReservationsController < ApplicationController
       before_action :set_user, only: [:create]
+      before_action :set_reservation, only: [:approve, :deny]
 
       def index
         @reservations = Reservation.all
@@ -11,22 +12,24 @@ module Api
       def create
           @reservation = Reservation.create(reservation_params)
 
-        ReservationsMailer.create_mail(@user).deliver_now
+        ReservationsMailer.create_mail(@user, @reservation).deliver_now
       end
 
 
       def approve
-        if Reservation.approve == true
+        if @reservation.approve != true
+          @reservation.approved = true
 
-          ReservationsMailer.approve_mail(@user).deliver_later
+            ReservationsMailer.approve_mail(@user, @reservation).deliver_later
         end
       end
 
 
       def deny
-        if Reservation.approved == false
+        if @reservation.approve != false
+          @reservation.approved = false
 
-          ReservationsMailer.denied_mail(@user).deliver_now
+          ReservationsMailer.denied_mail(@user, @reservation).deliver_now
         end
       end
 
@@ -35,6 +38,10 @@ module Api
       # Use callbacks to share common setup or constraints between actions.
       def set_user
         @user = User.find(params[:user_id])
+      end
+
+      def set_reservation
+        @reservation = Reservation.find(params[:id])
       end
 
       # Only allow a trusted parameter "white list" through.
