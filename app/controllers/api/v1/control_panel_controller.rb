@@ -19,12 +19,17 @@ module Api
         end
       end
 
-      def open_time
+      def open_time(machine)
+        if Machine.open_hour != true
+          Machine.all.each do |machine|
 
+
+          end
+        end
       end
 
       def end_open_time
-        if Machine.open_hour = false
+        if Machine.open_hour != false
           @usages = Usage
           @usages.in_use = 0
         end

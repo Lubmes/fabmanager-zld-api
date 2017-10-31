@@ -40,6 +40,10 @@ module Api
         @machine.destroy
       end
 
+      def use
+        @machine.usage.in_use += 1
+      end
+
       private
         # Use callbacks to share common setup or constraints between actions.
         def set_machine
