@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+</head>
+<body>
+<h1>Uw reservering is aangemaakt op de naam van, <%= @user.username %></h1>
+<p>
+  Uw reservering is aangemaakt op de naam van,
+  your username is: <%= @user.username %>.<br>
+  U zal zo snel mogelijk horen of de reservering word geaccepteerd of eventuele wijzigingen nodig heeft.
+</p>
+<p>
+  Hierbij de gegevens over uw reservering:
+  <%= @reservation %>.<br>
+</p>
+<p>Bedankt voor uw reservering! U zal snel van ons terughoren!</p>
+</body>
+</html>

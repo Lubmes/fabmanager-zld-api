@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
 
+  get 'events_controller/index'
+
   get 'weekly_time_tables/show'
 
   get 'tags/index'
@@ -10,7 +12,17 @@ Rails.application.routes.draw do
     namespace :v1 do
       resource :auth, only: %i[create]
       resources :tags, only: %i[index]
+      resources :reservations, only: %i{index}
+
+      resources :events do
+        collection do
+          post :retrieve_events
+          get :calendars
+        end
+      end
+
       resources :users do
+        resources :reservations, only: %i[create]
         member do
           get :occupations
           get :reservations
